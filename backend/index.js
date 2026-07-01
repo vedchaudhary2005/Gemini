@@ -12,16 +12,21 @@ import geminiResponse from "./gemini.js"
 const app=express()
 const allowedOrigins = [
     "http://localhost:5173",
-    "https://gemini-one-orcin.vercel.app"
+    "https://gemini-5-s0nk.onrender.com"
 ];
 if (process.env.FRONTEND_URL) {
     allowedOrigins.push(process.env.FRONTEND_URL.replace(/\/$/, ""));
 }
 
 app.use(cors({
-    origin: allowedOrigins,
-    credentials:true
-}))
+    origin: true,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+
+
 const port=process.env.PORT || 5000
 app.use(express.json())
 app.use(cookieParser())
