@@ -10,8 +10,16 @@ import geminiResponse from "./gemini.js"
 
 
 const app=express()
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://gemini-gamma-hazel.vercel.app"
+];
+if (process.env.FRONTEND_URL) {
+    allowedOrigins.push(process.env.FRONTEND_URL.replace(/\/$/, ""));
+}
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: allowedOrigins,
     credentials:true
 }))
 const port=process.env.PORT || 5000

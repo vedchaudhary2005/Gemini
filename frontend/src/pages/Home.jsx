@@ -67,6 +67,7 @@ function Home() {
   };
 
   const handleCommand = (data) => {
+    if (!data) return;
     const { type, userInput, response } = data;
     speak(response);
 
@@ -139,7 +140,7 @@ function Home() {
       console.warn("Recognition error:", event.error);
       isRecognizingRef.current = false;
       setListening(false);
-      if (event.error !== "aborted" && isMounted && !isSpeakingRef.current) {
+      if (event.error !== "aborted" && event.error !== "no-speech" && isMounted && !isSpeakingRef.current) {
         setTimeout(() => {
           if (isMounted) {
             try {
@@ -164,8 +165,10 @@ function Home() {
         isRecognizingRef.current = false;
         setListening(false);
         const data = await getGeminiResponse(transcript);
-        handleCommand(data);
-        setAiText(data.response);
+        if (data) {
+          handleCommand(data);
+          setAiText(data.response);
+        }
         setUserText("");
       }
     };
